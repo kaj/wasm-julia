@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <script type="module">
+      async function init() {
+        const { instance } = await WebAssembly.instantiateStreaming(
+          fetch("./wasm_julia.wasm")
+        );
+
+        const width = 350;
+        const height = 300;
+
+        const canvas = document.getElementById("demo-canvas");
+        canvas.width = width;
+        canvas.height = height;
+
+        const buffer_address = instance.exports.BUFFER.value;
+        const image = new ImageData(
+            new Uint8ClampedArray(
+                instance.exports.memory.buffer,
+                buffer_address,
+                4 * width * height,
+            ),
+            width,
+        );
+
+        const ctx = canvas.getContext("2d");
+        const render = () => {
+          instance.exports.go();
+          ctx.putImageData(image, 0, 0);
+	  n_fps += 1;
+          requestAnimationFrame(render);
+        };
+
+	const fps = document.getElementById("fps");
+	let n_fps = 0;
+	window.setInterval(function() {
+	  fps.innerText = n_fps;
+	  n_fps = 0;
+	}, 1000);
+
+        render();	  
+      }
+
+      init();
+    </script>
+  </head>
+  <body>
+    <canvas id="demo-canvas" style="width: 700px; height: 600px;"></canvas>
+    <p><span id="fps">?</span> fps</p>
+  </body>
+</html>
