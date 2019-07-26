@@ -38,7 +38,7 @@ fn render_frame_safe(buffer: &mut [u32; WIDTH * HEIGHT], c: Complex32) {
     const S: f32 = 3.2 / (HEIGHT as f32);
     const X0: f32 = ((WIDTH / 2) as f32) * S;
     const Y0: f32 = ((HEIGHT / 2) as f32) * S;
-    let max_iter = if has_inside(c) { 52 } else { 170 };
+    let max_iter = if has_inside(c) { 52 } else { 255 };
     for y in 0..HEIGHT / 2 {
         let zy = f32::from(y as i16) * S - Y0;
         for x in 0..WIDTH {
@@ -51,15 +51,20 @@ fn render_frame_safe(buffer: &mut [u32; WIDTH * HEIGHT], c: Complex32) {
             buffer[(HEIGHT - y) * WIDTH - x - 1] = val;
         }
     }
+    if max_iter == 52 {
+        for x in 2..5 {
+            for y in 2..5 {
+                buffer[y * WIDTH + x] = 0xff_ff_ff_ff;
+            }
+        }
+    }
 }
 
 /// Sample some points which will probably be inside if there is a large
 /// "black" area.
 fn has_inside(c: Complex32) -> bool {
     julia(Complex32::new(0., 0.), c, 255) == 0
-        && julia(Complex32::new(0.6, 0.4), c, 255) == 0
-        && julia(Complex32::new(0.1, 0.5), c, 255) == 0
-        && julia(Complex32::new(0.5, 0.2), c, 255) == 0
+        && julia(Complex32::new(0.01, 0.), c, 255) == 0
 }
 
 fn pixel(i: u8) -> u32 {
