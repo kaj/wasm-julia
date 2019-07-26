@@ -7,8 +7,8 @@ fn handle_panic(_: &core::panic::PanicInfo) -> ! {
     loop {}
 }
 
-const WIDTH: usize = 350;
-const HEIGHT: usize = 300;
+const WIDTH: usize = 360;
+const HEIGHT: usize = 270;
 
 /// The buffer is used with a "pointer cast" in javascript, so it must
 /// match the ImageData structure there.
