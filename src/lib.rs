@@ -51,6 +51,7 @@ fn render_frame_safe(buffer: &mut [u32; WIDTH * HEIGHT], c: Complex32) {
             buffer[(HEIGHT - y) * WIDTH - x - 1] = val;
         }
     }
+    /*
     if max_iter == 52 {
         for x in 2..5 {
             for y in 2..5 {
@@ -58,6 +59,7 @@ fn render_frame_safe(buffer: &mut [u32; WIDTH * HEIGHT], c: Complex32) {
             }
         }
     }
+     */
 }
 
 /// Sample some points which will probably be inside if there is a large
