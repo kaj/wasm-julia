@@ -25,11 +25,14 @@
             width,
         );
 
+        let odd = false;
         const ctx = canvas.getContext("2d");
-        const render = () => {
-          instance.exports.go();
-          ctx.putImageData(image, 0, 0);
-	  n_fps += 1;
+        const render = function () {
+          if (odd = !odd) {
+            instance.exports.go();
+            ctx.putImageData(image, 0, 0);
+            n_fps += 1;
+          }
           requestAnimationFrame(render);
         };
 
